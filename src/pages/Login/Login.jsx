@@ -43,7 +43,9 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-1 text-center uppercase">Train Tracker</h2>
+        <h2 className="text-2xl font-bold mb-1 text-center uppercase">
+          Train Tracker
+        </h2>
         <p className="text-2xl font-bold mb-6 text-center uppercase">Sign In</p>
         <input
           type="text"
@@ -70,9 +72,9 @@ const Login = () => {
         >
           Login
         </button>
-        {error && (
-          <span className="text-red-500 mt-4 block">{error.message}</span>
-        )}
+          {error && (
+            <span className="text-red-500 mt-4">{error.message}</span>
+          )}
       </div>
     </div>
   );

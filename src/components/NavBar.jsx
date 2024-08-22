@@ -16,7 +16,7 @@ const NavBar = () => {
 
   return (
     <header>
-      <nav className=" flex justify-between w-full px-10 py-4 fixed items-center z-10">
+      <nav className=" flex justify-between w-full px-10 py-4 items-center bg-black z-10">
         <a
           href=""
           className="text-white flex items-center gap-2 text-lg uppercase font-bold"

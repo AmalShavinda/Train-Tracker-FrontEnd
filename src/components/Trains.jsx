@@ -30,7 +30,7 @@ const Trains = () => {
       <h1 className="flex justify-center text-2xl text-[#323232] font-semibold uppercase my-4">
         Available Trains
       </h1>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex items-center justify-center flex-wrap gap-4">
         {trains.map((train, index) => (
           <div
             key={index}
