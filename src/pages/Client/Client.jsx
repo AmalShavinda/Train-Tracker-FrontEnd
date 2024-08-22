@@ -4,7 +4,7 @@ import Hero from "../../components/Hero";
 
 const Client = () => {
   return (
-    <main className="relative">
+    <main className="relative overflow-hidden">
       <section>
         <NavBar />
       </section>
