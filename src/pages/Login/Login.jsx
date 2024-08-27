@@ -27,7 +27,8 @@ const Login = () => {
       );
       const { isAdmin } = res.data;
 
-      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
+      dispatch({ type: "LOGIN_SUCCESS", payload: { ...res.data.details, isAdmin: isAdmin}, });
+
       if (isAdmin) {
         navigate("/admin");
       } else {
@@ -35,8 +36,7 @@ const Login = () => {
       }
     } catch (err) {
       dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });
-      document.getElementById("username").value = "";
-      document.getElementById("password").value = "";
+      setCredentials({ username: "", password: "" });
     }
   };
 
