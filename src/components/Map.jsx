@@ -61,6 +61,7 @@ import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import useFetch from "../hooks/useFetch";
+import NavBar from "../components/NavBar";
 
 const Map = () => {
   const { id } = useParams();
@@ -85,22 +86,27 @@ const Map = () => {
   }
 
   return (
-    <MapContainer
-      center={[trainLocation.latitude, trainLocation.longitude]}
-      zoom={10}
-      style={{ height: "100vh", width: "100%" }}
-    >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Marker position={[trainLocation.latitude, trainLocation.longitude]}>
-        <Popup>
-          {trainLocation.location} <br />
-          {`Lat: ${trainLocation.latitude}, Lng: ${trainLocation.longitude}`}
-        </Popup>
-      </Marker>
-    </MapContainer>
+    <div className="flex flex-col items-center justify-center">
+      <div className="w-full">
+        <NavBar />
+      </div>
+      <MapContainer
+        center={[trainLocation.latitude, trainLocation.longitude]}
+        zoom={11}
+        className="flex justify-center items-center mt-10 w-[90vw] h-[90vh]"
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <Marker position={[trainLocation.latitude, trainLocation.longitude]}>
+          <Popup>
+            {trainLocation.location} <br />
+            {`Lat: ${trainLocation.latitude}, Lng: ${trainLocation.longitude}`}
+          </Popup>
+        </Marker>
+      </MapContainer>
+    </div>
   );
 };
 

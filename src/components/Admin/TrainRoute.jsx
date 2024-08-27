@@ -1,12 +1,10 @@
 import { useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
-import { GrView } from "react-icons/gr";
 
-const Trains = () => {
+const TrainRoute = () => {
   const { data, loading, error, reFetch } = useFetch(
     "http://localhost:8800/api/train/get-trains"
   );
@@ -17,7 +15,6 @@ const Trains = () => {
     engineId: "",
   });
   const [editingTrainId, setEditingTrainId] = useState(null);
-  const navigate = useNavigate();
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -127,11 +124,6 @@ const Trains = () => {
                   onClick={() => handleEditTrain(train)}
                   className="cursor-pointer text-blue-500 hover:text-blue-600"
                 />
-                <GrView
-                  size={20}
-                  onClick={() => navigate(`/track-trains/${train._id}`)}
-                  className="cursor-pointer text-green-500 hover:text-green-600"
-                />
               </td>
             </tr>
           ))}
@@ -208,4 +200,4 @@ const Trains = () => {
   );
 };
 
-export default Trains;
+export default TrainRoute;

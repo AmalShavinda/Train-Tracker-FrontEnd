@@ -4,139 +4,123 @@ import axios from "axios";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 
-const Users = () => {
+const Engine = () => {
   const { data, loading, error, reFetch } = useFetch(
-    "http://localhost:8800/api/users/get-users"
+    "http://localhost:8800/api/engine/get-engines"
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newUser, setNewUser] = useState({
-    firstname: "",
-    username: "",
-    email: "",
-    password: "",
-    isAdmin: false,
+  const [newEngine, setNewEngine] = useState({
+    engineId: "",
+    engineType: "",
+    engineRoute: "",
+    status: "",
   });
-  const [updateUser, setUpdateUser] = useState({
-    firstname: "",
-    username: "",
-    email: "",
-    isAdmin: false,
-  });
-  const [editingUserId, setEditingUserId] = useState(null);
+  const [editingEngineId, setEditingEngineId] = useState(null);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8800/api/users/remove/${id}`);
+      await axios.delete(`http://localhost:8800/api/engine/remove/${id}`);
       reFetch();
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.error("Error deleting engine:", error);
     }
   };
 
-  const handleUserSubmit = async (e) => {
+  const handleEngineSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      if (editingUserId) {
-        // Update user
+      if (editingEngineId) {
+        // Update engine
         await axios.put(
-          `http://localhost:8800/api/users/update-user/${editingUserId}`,
-          updateUser
+          `http://localhost:8800/api/engine/update-engine/${editingEngineId}`,
+          newEngine
         );
       } else {
-        // Add new user
-        await axios.post("http://localhost:8800/api/auth/register", newUser);
+        // Add new engine
+        await axios.post("http://localhost:8800/api/engine/add", newEngine);
       }
       reFetch();
       setIsModalOpen(false);
-      setNewUser({
-        firstname: "",
-        username: "",
-        email: "",
-        password: "",
-        isAdmin: false,
+      setNewEngine({
+        engineId: "",
+        engineType: "",
+        engineRoute: "",
+        status: "",
       });
-      setEditingUserId(null); // Reset editing state
+      setEditingEngineId(null); // Reset editing state
     } catch (error) {
-      console.error("Error handling user:", error);
+      console.error("Error handling engine:", error);
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNewUser({
-      ...newUser,
-      [name]: name === "isAdmin" ? value === "true" : value,
-    });
-    setUpdateUser({
-      ...newUser,
-      [name]: name === "isAdmin" ? value === "true" : value,
+    setNewEngine({
+      ...newEngine,
+      [name]: value,
     });
   };
 
-  const handleEditUser = (user) => {
-    setNewUser({
-      firstname: user.firstname,
-      username: user.username,
-      email: user.email,
-      isAdmin: user.isAdmin,
+  const handleEditEngine = (engine) => {
+    setNewEngine({
+      engineId: engine.engineId,
+      engineType: engine.engineType,
+      status: engine.status || "",
     });
-    setEditingUserId(user._id);
+    setEditingEngineId(engine._id);
     setIsModalOpen(true);
   };
 
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Users</h2>
+        <h2 className="text-2xl font-bold">Engines</h2>
         <button
           onClick={() => {
             setIsModalOpen(true);
-            setEditingUserId(null); // Ensure the form is in add mode
-            setNewUser({
-              firstname: "",
-              username: "",
-              email: "",
-              password: "",
-              isAdmin: false,
+            setEditingEngineId(null); // Ensure the form is in add mode
+            setNewEngine({
+              engineId: "",
+              engineType: "",
+              engineRoute: "",
+              status: "",
             });
           }}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          New User
+          New Engine
         </button>
       </div>
       <table className="min-w-full bg-white">
         <thead>
           <tr>
-            <th className="py-2 px-4 border">First Name</th>
-            <th className="py-2 px-4 border">User Name</th>
-            <th className="py-2 px-4 border">Email</th>
-            <th className="py-2 px-4 border">Role</th>
+            <th className="py-2 px-4 border">Engine Id</th>
+            <th className="py-2 px-4 border">Engine Type</th>
+            <th className="py-2 px-4 border">Engine Route</th>
+            <th className="py-2 px-4 border">Status</th>
             <th className="py-2 px-4 border">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((user) => (
-            <tr key={user._id}>
-              <td className="border px-4 py-2">{user.firstname}</td>
-              <td className="border px-4 py-2">{user.username}</td>
-              <td className="border px-4 py-2">{user.email}</td>
-              <td className="border px-4 py-2">
-                {user.isAdmin ? "Admin" : "User"}
-              </td>
+          {data.map((engine) => (
+            <tr key={engine._id}>
+              <td className="border px-4 py-2">{engine.engineId}</td>
+              <td className="border px-4 py-2">{engine.engineType}</td>
+              <td className="border px-4 py-2">{engine.engineRoute}</td>
+              <td className="border px-4 py-2">{engine.status}</td>
               <td className="border px-4 py-2 flex gap-5">
-              <RiDeleteBin6Line
+                <RiDeleteBin6Line
                   size={20}
-                  onClick={() => handleDelete(user._id)}
+                  onClick={() => handleDelete(engine._id)}
                   className="cursor-pointer text-red-500 hover:text-red-600"
                 />
                 <FaRegEdit
                   size={20}
-                  onClick={() => handleEditUser(user)}
+                  onClick={() => handleEditEngine(engine)}
                   className="cursor-pointer text-blue-500 hover:text-blue-600"
                 />
               </td>
@@ -149,17 +133,17 @@ const Users = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-12 rounded shadow-lg">
             <h2 className="text-xl font-bold mb-4">
-              {editingUserId ? "Update User" : "Add New User"}
+              {editingEngineId ? "Update Engine" : "Add New Engine"}
             </h2>
-            <form onSubmit={handleUserSubmit}>
+            <form onSubmit={handleEngineSubmit}>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  First Name
+                  Engine ID
                 </label>
                 <input
                   type="text"
-                  name="firstname"
-                  value={newUser.firstname}
+                  name="engineId"
+                  value={newEngine.engineId}
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-[400px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   required
@@ -167,12 +151,12 @@ const Users = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Username
+                  Engine Type
                 </label>
                 <input
                   type="text"
-                  name="username"
-                  value={newUser.username}
+                  name="engineType"
+                  value={newEngine.engineType}
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-[400px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   required
@@ -180,52 +164,50 @@ const Users = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={newUser.email}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-[400px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  value={newUser.password}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-[400px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required={!editingUserId}
-                  disabled={editingUserId} // Password required only for new users
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Role
+                  Engine Route
                 </label>
                 <select
-                  name="isAdmin"
-                  value={newUser.isAdmin ? "true" : "false"}
+                  type="text"
+                  name="engineRoute"
+                  value={newEngine.engineRoute}
                   onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-[400px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  required
                 >
-                  <option value="false">User</option>
-                  <option value="true">Admin</option>
+                  <option value="" disabled selected>
+                    Select Engine Route
+                  </option>
+                  <option value="R001">Matara - Maradana</option>
+                  <option value="R002">Beliatta - Maradana</option>
+                  <option value="R003">Maradana - Polonnaruwa</option>
                 </select>
               </div>
-
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Status
+                </label>
+                <select
+                  type="text"
+                  name="status"
+                  value={newEngine.status}
+                  onChange={handleChange}
+                  className="shadow appearance-none border rounded w-[400px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Select Engine Type
+                  </option>
+                  <option value="FTA">Free to Attched</option>
+                  <option value="ATT">Attched</option>
+                  <option value="UNM">Under Maintain</option>
+                </select>
+              </div>
               <div className="flex items-center justify-between">
                 <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
-                  {editingUserId ? "Update User" : "Add User"}
+                  {editingEngineId ? "Update Engine" : "Add Engine"}
                 </button>
                 <button
                   type="button"
@@ -244,4 +226,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Engine;

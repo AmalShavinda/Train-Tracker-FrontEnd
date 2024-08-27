@@ -17,9 +17,9 @@ const NavBar = () => {
   return (
     <header>
       <nav className=" flex justify-between w-full px-10 py-4 items-center bg-black z-10">
-        <a
-          href=""
-          className="text-white flex items-center gap-2 text-lg uppercase font-bold"
+        <div
+          className="text-white flex items-center gap-2 text-lg uppercase font-bold cursor-pointer"
+          onClick={() => handleNavigate("/")}
         >
           <SiTrainerroad size={30} color="white" />
           <BsFillTrainFreightFrontFill
@@ -28,7 +28,7 @@ const NavBar = () => {
             className="ml-[-6px]"
           />
           tracker
-        </a>
+        </div>
         <ul className="flex-1 flex justify-center items-center gap-16">
           {navLinks.map((item) => (
             <li key={item.label}>
