@@ -62,6 +62,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import useFetch from "../hooks/useFetch";
 import NavBar from "../components/NavBar";
+import Footer from "./Footer";
 
 const Map = () => {
   const { id } = useParams();
@@ -93,7 +94,7 @@ const Map = () => {
       <MapContainer
         center={[trainLocation.latitude, trainLocation.longitude]}
         zoom={11}
-        className="flex justify-center items-center mt-10 w-[90vw] h-[90vh]"
+        className="flex justify-center items-center my-10 w-[95vw] h-[90vh]"
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -106,6 +107,9 @@ const Map = () => {
           </Popup>
         </Marker>
       </MapContainer>
+      <div className="w-full">
+        <Footer />
+      </div>
     </div>
   );
 };
