@@ -45,7 +45,7 @@ const Trains = () => {
                 {train.routeName}
               </p>
               <button
-                className="flex justify-center bg-blue-500 rounded-sm text-white px-6 py-2 mt-3"
+                className="flex justify-center bg-blue-500 rounded-sm text-white font-semibold px-6 py-2 mt-3 uppercase"
                 onClick={() => handleNavigate(train._id)}
               >
                 See Live Location
