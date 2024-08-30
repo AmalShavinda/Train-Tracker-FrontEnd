@@ -1,47 +1,68 @@
 import { useState } from "react";
 import axios from "axios";
+import useFetch from "../../hooks/useFetch";
 
 const TrainHistory = () => {
   const [date, setDate] = useState("");
+  const [trainName, setTrainName] = useState(""); // State to hold selected train name
   const [trainHistory, setTrainHistory] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState(null);
+  const [load, setLoad] = useState(false);
+
+  const { data, loading, error, reFetch } = useFetch(
+    "http://localhost:8800/api/train/get-trains"
+  );
 
   const getTimeFromTimestamp = (timestamp) => {
-    // Create a new Date object from the timestamp
     const date = new Date(timestamp);
-    
-    // Extract hours, minutes, and seconds
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    
-    // Format the time as HH:MM:SS
+    const hours = date.getUTCHours().toString().padStart(2, "0");
+    const minutes = date.getUTCMinutes().toString().padStart(2, "0");
     return `${hours}:${minutes}`;
   };
 
   const handleSearch = async () => {
     try {
-      setLoading(true);
-      // Ensure the date has time and timezone components
-      const formattedDate = new Date(date).toISOString();
-      const response = await axios.get(`http://localhost:8800/api/train-history?date=${formattedDate}`);
-      setTrainHistory(response.data);
-      setError(null);
+      setLoad(true);
+      const formattedDate = new Date(date).toISOString().split("T")[0];
+      const response = await axios.get(
+        `http://localhost:8800/api/train-history/?trainName=${trainName}&date=${formattedDate}`
+      );
+      
+      // Check if the response data is an array
+      if (Array.isArray(response.data)) {
+        setTrainHistory(response.data);
+      } else {
+        setTrainHistory([response.data]); // Convert the single object to an array
+      }
+      
+      setErr(null);
     } catch (err) {
-      setError("Train history not found for the given date.");
+      setErr("Train history not found for the given date.");
       setTrainHistory([]);
     } finally {
-      setLoading(false);
+      setLoad(false);
     }
   };
-
-  console.log(trainHistory)
 
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Train History</h2>
         <div className="flex gap-4">
+          <select
+            name="train"
+            id="train"
+            value={trainName} // Bind select value to state
+            onChange={(e) => setTrainName(e.target.value)} // Update state when option is selected
+            className="p-2 px-6"
+          >
+            <option value="" disabled>Select Train</option> {/* Placeholder option */}
+            {data.map((train) => (
+              <option key={train._id} value={train.trainName}>
+                {train.trainName}
+              </option>
+            ))}
+          </select>
           <input
             type="date"
             value={date}
@@ -56,8 +77,8 @@ const TrainHistory = () => {
           </button>
         </div>
       </div>
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {load && <p>Loading...</p>}
+      {err && <p className="text-red-500">{err}</p>}
       <table className="min-w-full bg-white">
         <thead>
           <tr>
@@ -69,17 +90,17 @@ const TrainHistory = () => {
           </tr>
         </thead>
         <tbody>
-          {trainHistory.map((train, index) => (
+          {trainHistory.map((train, index) => 
             train.locations.map((location, locIndex) => (
               <tr key={`${index}-${locIndex}`}>
                 <td className="border px-4 py-2">{train.trainName}</td>
-                <td className="border px-4 py-2">{location.location || 'N/A'}</td>
-                <td className="border px-4 py-2">{location.latitude || 'N/A'}</td>
-                <td className="border px-4 py-2">{location.longitude || 'N/A'}</td>
-                <td className="border px-4 py-2">{getTimeFromTimestamp(location.arrivalTime) || 'N/A'}</td>
+                <td className="border px-4 py-2">{location.location}</td>
+                <td className="border px-4 py-2">{location.latitude}</td>
+                <td className="border px-4 py-2">{location.longitude}</td>
+                <td className="border px-4 py-2">{getTimeFromTimestamp(location.arrivalTime)}</td>
               </tr>
             ))
-          ))}
+          )}
         </tbody>
       </table>
     </div>

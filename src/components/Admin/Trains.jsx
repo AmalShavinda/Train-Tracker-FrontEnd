@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useFetch from "../../hooks/useFetch";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,22 @@ const Trains = () => {
     engineId: "",
   });
   const [editingTrainId, setEditingTrainId] = useState(null);
+  const [engines, setEngines] = useState([]); // State to store engine IDs
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch engine IDs when the component mounts
+    const fetchEngines = async () => {
+      try {
+        const response = await axios.get("http://localhost:8800/api/engine/get-engines");
+        setEngines(response.data);
+      } catch (error) {
+        console.error("Error fetching engines:", error);
+      }
+    };
+
+    fetchEngines();
+  }, []);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -98,9 +113,9 @@ const Trains = () => {
       <table className="min-w-full bg-white">
         <thead>
           <tr>
+            <th className="py-2 px-4 border">Engine ID</th>
             <th className="py-2 px-4 border">Train Name</th>
             <th className="py-2 px-4 border">Route Name</th>
-            <th className="py-2 px-4 border">Engine ID</th>
             <th className="py-2 px-4 border">Location</th>
             <th className="py-2 px-4 border">Latitude</th>
             <th className="py-2 px-4 border">Longitude</th>
@@ -110,9 +125,9 @@ const Trains = () => {
         <tbody>
           {data.map((train) => (
             <tr key={train._id}>
+              <td className="border px-4 py-2">{train.engineId}</td>
               <td className="border px-4 py-2">{train.trainName}</td>
               <td className="border px-4 py-2">{train.routeName}</td>
-              <td className="border px-4 py-2">{train.engineId}</td>
               <td className="border px-4 py-2">{train.location}</td>
               <td className="border px-4 py-2">{train.latitude}</td>
               <td className="border px-4 py-2">{train.longitude}</td>
@@ -147,6 +162,25 @@ const Trains = () => {
             <form onSubmit={handleTrainSubmit}>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Engine Id
+                </label>
+                <select
+                  name="engineId"
+                  value={newTrain.engineId}
+                  onChange={handleChange}
+                  className="shadow appearance-none border rounded w-[400px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  required
+                >
+                  <option value="">Select an engine</option>
+                  {engines.map((engine) => (
+                    <option key={engine._id} value={engine._id}>
+                      {engine.engineId}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
                   Train Name
                 </label>
                 <input
@@ -166,19 +200,6 @@ const Trains = () => {
                   type="text"
                   name="routeName"
                   value={newTrain.routeName}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-[400px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Engine ID
-                </label>
-                <input
-                  type="text"
-                  name="engineId"
-                  value={newTrain.engineId}
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-[400px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   required
