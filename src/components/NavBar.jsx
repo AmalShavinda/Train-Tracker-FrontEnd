@@ -7,7 +7,7 @@ import { AuthContext } from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
-  const { user } = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleNavigate = (path) => {
@@ -32,37 +32,38 @@ const NavBar = () => {
         <ul className="flex-1 flex justify-center items-center gap-16">
           {navLinks.map((item) => (
             <li key={item.label}>
-              <a
-                href={item.href}
-                className="leading-normal text-base text-white uppercase"
+              <div
+                onClick={() => handleNavigate(item.href)}
+                className="leading-normal text-base text-white cursor-pointer uppercase"
               >
                 {item.label}
-              </a>
+              </div>
             </li>
           ))}
         </ul>
         <div className="flex items-center gap-6">
-          {user ?
-          (
+          {user ? (
             <>
-           <p className="text-base text-white leading-normal uppercase">{user.firstname}</p>
-           <FaUserCircle color="white" size={22}/>
-           </>
+              <p className="text-base text-white leading-normal uppercase">
+                {user.firstname}
+              </p>
+              <FaUserCircle color="white" size={22} />
+            </>
           ) : (
             <>
-          <button
-            className="px-10 py-2 bg-blue-500 text-white text-sm font-semibold uppercase"
-            onClick={() => handleNavigate("/login")}
-          >
-            Sign In
-          </button>
-          <button
-            className="text-white font-semibold uppercase text-sm px-10 py-2 border border-blue-500"
-            onClick={() => handleNavigate("/signup")}
-          >
-            Sign Up
-          </button>
-          </>
+              <button
+                className="px-10 py-2 bg-blue-500 text-white text-sm font-semibold uppercase"
+                onClick={() => handleNavigate("/login")}
+              >
+                Sign In
+              </button>
+              <button
+                className="text-white font-semibold uppercase text-sm px-10 py-2 border border-blue-500"
+                onClick={() => handleNavigate("/signup")}
+              >
+                Sign Up
+              </button>
+            </>
           )}
         </div>
       </nav>

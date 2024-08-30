@@ -22,12 +22,15 @@ const Login = () => {
     dispatch({ type: "LOGIN_START" });
     try {
       const res = await axios.post(
-        "http://localhost:8800/api/auth/login",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
         credentials
       );
       const { isAdmin } = res.data;
 
-      dispatch({ type: "LOGIN_SUCCESS", payload: { ...res.data.details, isAdmin: isAdmin}, });
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: { ...res.data.details, isAdmin: isAdmin },
+      });
 
       if (isAdmin) {
         navigate("/admin");
@@ -72,9 +75,7 @@ const Login = () => {
         >
           Login
         </button>
-          {error && (
-            <span className="text-red-500 mt-4">{error.message}</span>
-          )}
+        {error && <span className="text-red-500 mt-4">{error.message}</span>}
       </div>
     </div>
   );
