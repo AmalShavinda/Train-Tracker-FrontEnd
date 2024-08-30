@@ -23,7 +23,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8800/api/auth/register",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
         userData
       );
       console.log("Registration successful:", response.data);
