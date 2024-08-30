@@ -6,7 +6,7 @@ import { FaRegEdit } from "react-icons/fa";
 
 const Engine = () => {
   const { data, loading, error, reFetch } = useFetch(
-    "http://localhost:8800/api/engine/get-engines"
+    `${import.meta.env.VITE_BACKEND_URL}/api/engine/get-engines`
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newEngine, setNewEngine] = useState({
@@ -22,7 +22,7 @@ const Engine = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8800/api/engine/remove/${id}`);
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/engine/remove/${id}`);
       reFetch();
     } catch (error) {
       console.error("Error deleting engine:", error);
@@ -36,12 +36,12 @@ const Engine = () => {
       if (editingEngineId) {
         // Update engine
         await axios.put(
-          `http://localhost:8800/api/engine/update-engine/${editingEngineId}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/engine/update-engine/${editingEngineId}`,
           newEngine
         );
       } else {
         // Add new engine
-        await axios.post("http://localhost:8800/api/engine/add", newEngine);
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/engine/add`, newEngine);
       }
       reFetch();
       setIsModalOpen(false);

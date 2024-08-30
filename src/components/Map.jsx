@@ -71,7 +71,7 @@ const Map = () => {
     loading,
     error,
     reFetch,
-  } = useFetch(`http://localhost:8800/api/train/get-train/${id}`);
+  } = useFetch(`${import.meta.env.VITE_BACKEND_URL}/api/train/get-train/${id}`);
 
   useEffect(() => {
     const intervalId = setInterval(reFetch, 60000); // Re-fetch location every minute

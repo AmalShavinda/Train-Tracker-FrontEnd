@@ -10,7 +10,7 @@ const TrainHistory = () => {
   const [load, setLoad] = useState(false);
 
   const { data, loading, error, reFetch } = useFetch(
-    "http://localhost:8800/api/train/get-trains"
+    `${import.meta.env.VITE_BACKEND_URL}/api/train/get-trains`
   );
 
   const getTimeFromTimestamp = (timestamp) => {
@@ -25,7 +25,7 @@ const TrainHistory = () => {
       setLoad(true);
       const formattedDate = new Date(date).toISOString().split("T")[0];
       const response = await axios.get(
-        `http://localhost:8800/api/train-history/?trainName=${trainName}&date=${formattedDate}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/train-history/?trainName=${trainName}&date=${formattedDate}`
       );
       
       // Check if the response data is an array
