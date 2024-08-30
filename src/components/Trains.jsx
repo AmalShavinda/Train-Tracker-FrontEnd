@@ -15,7 +15,7 @@ const Trains = () => {
     const fetchTrains = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8800/api/train/get-trains"
+          `${import.meta.env.VITE_BACKEND_URL}/api/train/get-trains`
         );
         setTrains(res.data);
       } catch (error) {

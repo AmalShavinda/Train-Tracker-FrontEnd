@@ -6,7 +6,7 @@ import { FaRegEdit } from "react-icons/fa";
 
 const TrainRoute = () => {
   const { data, loading, error, reFetch } = useFetch(
-    "http://localhost:8800/api/train/get-trains"
+    `${import.meta.env.VITE_BACKEND_URL}/api/train/get-trains`
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTrain, setNewTrain] = useState({
@@ -21,7 +21,7 @@ const TrainRoute = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8800/api/train/remove/${id}`);
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/train/remove/${id}`);
       reFetch();
     } catch (error) {
       console.error("Error deleting train:", error);
@@ -35,12 +35,12 @@ const TrainRoute = () => {
       if (editingTrainId) {
         // Update train
         await axios.put(
-          `http://localhost:8800/api/train/update-train/${editingTrainId}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/train/update-train/${editingTrainId}`,
           newTrain
         );
       } else {
         // Add new train
-        await axios.post("http://localhost:8800/api/train/add", newTrain);
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/train/add`, newTrain);
       }
       reFetch();
       setIsModalOpen(false);

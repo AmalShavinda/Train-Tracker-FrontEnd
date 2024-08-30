@@ -6,7 +6,7 @@ import { FaRegEdit } from "react-icons/fa";
 
 const Users = () => {
   const { data, loading, error, reFetch } = useFetch(
-    "http://localhost:8800/api/users/get-users"
+    `${import.meta.env.VITE_BACKEND_URL}/api/users/get-users`
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newUser, setNewUser] = useState({
@@ -29,7 +29,7 @@ const Users = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8800/api/users/remove/${id}`);
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/users/remove/${id}`);
       reFetch();
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -43,12 +43,12 @@ const Users = () => {
       if (editingUserId) {
         // Update user
         await axios.put(
-          `http://localhost:8800/api/users/update-user/${editingUserId}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/update-user/${editingUserId}`,
           updateUser
         );
       } else {
         // Add new user
-        await axios.post("http://localhost:8800/api/auth/register", newUser);
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, newUser);
       }
       reFetch();
       setIsModalOpen(false);
