@@ -3,6 +3,7 @@ import { navLinks } from "../constants";
 import { SiTrainerroad } from "react-icons/si";
 import { BsFillTrainFreightFrontFill } from "react-icons/bs";
 import { FaUserCircle } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 import { AuthContext } from "../contexts/authContext";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +13,11 @@ const NavBar = () => {
 
   const handleNavigate = (path) => {
     navigate(path);
+  };
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    navigate("/login");
   };
 
   return (
@@ -48,6 +54,7 @@ const NavBar = () => {
                 {user.firstname}
               </p>
               <FaUserCircle color="white" size={22} />
+              <FiLogOut color="white" size={22} onClick={handleLogOut} className="cursor-pointer"/>
             </>
           ) : (
             <>

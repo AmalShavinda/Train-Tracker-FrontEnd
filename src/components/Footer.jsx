@@ -14,7 +14,7 @@ const Footer = () => {
 
   return (
     <div className="overflow-hidden">
-      <div className="flex max-sm:flex-col justify-between bg-black px-10 py-6">
+      <div className="flex max-sm:flex-col justify-between bg-black px-20 py-6">
         <div>
           <div
             className="text-white flex items-center gap-2 text-lg uppercase font-bold cursor-pointer"
@@ -73,14 +73,14 @@ const Footer = () => {
           <ul className="space-y-4 max-sm:space-y-1 max-sm:mt-4">
             <li className="text-base text-white font-bold">Account Login</li>
             <li
-              className="text-base text-white font-normal cursor-pointer max-sm:text-sm hover:text-gray-300 up"
-              onClick={() =>handleNavigate("/login")}
+              className="text-base text-white font-normal cursor-pointer max-sm:text-sm hover:text-gray-300 uppercase"
+              onClick={() => handleNavigate("/login")}
             >
               Sign in
             </li>
             <li
               className="text-base text-white font-normal cursor-pointer max-sm:text-sm hover:text-gray-300 uppercase"
-              onClick={() =>handleNavigate("/signup")}
+              onClick={() => handleNavigate("/signup")}
             >
               Sign Up
             </li>
